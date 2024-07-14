@@ -6,7 +6,9 @@
 |------|---|---|---|---|
 |[유민주](https://github.com/yminjuu)|[백승현](https://github.com/hyun907)|[이시온](https://github.com/xionng)|[공윤호](https://github.com/Patrick-Gong)|[박채연](https://github.com/qkrcodus)|
 
-# 📝 스터디 내용 : [모던 리액트 딥다이브]를 읽고 정리한 내용입니다.
+# 📝 스터디 내용
+>[모던 리액트 딥다이브]를 읽고 정리한 내용입니다.
+
 **Chapter**|**Title**|
 |:-:|-|
 |1장|[📍자바스크립트](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/1_%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8.md#0-%EB%93%A4%EC%96%B4%EA%B0%80%EB%A9%B0)|
