@@ -13,3 +13,6 @@
 |:-:|-|
 |1장|[📍자바스크립트](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/1_%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8.md#0-%EB%93%A4%EC%96%B4%EA%B0%80%EB%A9%B0)|
 |2.1장-2.3장|[📍리액트 핵심 요소](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/2.1-2.3_%EB%A6%AC%EC%95%A1%ED%8A%B8%ED%95%B5%EC%8B%AC%EC%9A%94%EC%86%8C.md)|
+|2.4장|[📍렌더링은 어떻게 일어나는가](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/2.4_%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%9D%BC%EC%96%B4%EB%82%98%EB%8A%94%EA%B0%80.md)|
+|2.5장|[📍메모이제이션](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/2.5_%EB%A9%94%EB%AA%A8%EC%9D%B4%EC%A0%9C%EC%9D%B4%EC%85%98.md)|
+|3장|[📍훅](https://github.com/likelion-ssu/2024_React_Study/blob/main/%EB%AA%A8%EB%8D%98%20%EB%A6%AC%EC%95%A1%ED%8A%B8%20Deep%20Dive/3_%ED%9B%85.md)|
