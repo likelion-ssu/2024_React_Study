@@ -1,0 +1,312 @@
+### 8.2 리액트 테스트 라이브러리
+
+저희는 지금까지 `yarn dev` 명령어로  Vite 개발 서버를 시작하고, 기본적으로 [`localhost:5173`](http://localhost:5173) 에서 어플리케이션을 볼 수 있었다.
+
+React Testing Library를 사용한 테스트는 개발 서버인 `localhost:5173`과는 무관하게 테스트 환경을 구성
+
+굳이 **React Testing Library** 를 쓰는 이유 ?
+
+개발자가 모든 기능을 수동으로 확인하는 것은 시간이 많이 걸리고 비효율적이다.
+
+ 대규모 애플리케이션 또는 여러 개발자가 함께 작업하는 프로젝트에서 중요하다.
+
+작성한 코드가 목적에 맞게 작동하는지 확인하는 대상 코드를 “테스트 코드” 라고 한다.
+
+> jsdom ⇒  DOM testing library ⇒ React Testing Library
+> 
+
+### jsdom
+
+서버 측 환경(예: Node.js)에서 **DOM API**를 사용할 수 있게 하는 라이브러리다. 실제 웹 브라우저가 아니라도 HTML을 파싱하여 DOM 트리를 생성하고, 이를 조작할 수 있는 환경을 제공한다
+
+### DOM API란? 그리고 이는 어디에 위치?
+
+웹 페이지가 로드되면, 브라우저는 페이지의 HTML을 파싱하여 DOM 트리라는 구조로 메모리에 저장하는데 
+
+ 웹 브라우저 내에 내장된 DOM 구조에 접근하고 이를 조작할 수 있도록 하는 메서드와 속성을 제공하는 인터페이스
+
+jsdom 을 이용한 DOM 조작
+
+```jsx
+//jsdom 라이브러리 로드
+const jsdom = require("jsdom");
+//jsdom 모듈 내에 정의된 "JSDOM" 클래스를 구조분해할당을 통해 가져옴
+const { JSDOM } = jsdom;
+//JSDOM 클래스로 HTML 문서를 사용해 JSDOM 객체를 생성. 이 객체는 가상의 DOM 환경을 제공
+//이 환경에서 HTML요소를 조작 가능
+const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+//DOM 환경에 접근하고 내용을 출력
+//dom.window 는 문서의 window 객체에 해당 이는 DOM 요소를 조작가능하게 해줌
+console.log(dom.window.document.querySelector("p").textContent); // "Hello world"
+```
+
+### **React Testing Library**
+
+DOM Testing Library 위에 구축되어, React 컴포넌트를 더 효과적으로 테스트할 수 있도록 확장된 라이브러리
+
+책에선 create- react- app과 함께 사용되는 리액트 테스팅 라이브러리의 예제들을 소개하고 있다. 
+
+### 과정
+
+1. 테스트 케이스 정의
+
+`App` 컴포넌트가 정상적으로 렌더링 되었는지 확인하고, 특정 텍스트("learn react")를 포함하고 있는지 테스트
+
+1. 테스트 환경설정 및 스크립트 작성
+    1. 필요한게 React Testing Library, Jest, 그리고 Babel
+    
+    **Jest**는 Facebook에서 개발한 JavaScript 테스트 프레임워크 
+    
+     **Babel**은 최신 JavaScript코드를 이전 버전으로 변환하여, 다양한 환경(예: 오래된 브라우저 또는 특정 JavaScript 엔진)에서 코드가 동작할 수 있도록 합니다.  ⇒ 호환성 증가
+    
+     b .  스크립트 작성 과정
+    
+    ```jsx
+    test('renders learn react link', () => {
+    	render(<App/>)
+        const linkElement = screen.getByText(/learn react/i)
+        expect(linkElement).toBeInTheDocument()
+    }
+    ```
+    
+    1. 컴포넌트를 렌더링. 
+        - `render(<App/>)` 함수를 호출하여 `App` 컴포넌트를 가상의 DOM에 렌더링
+    2. 컴포넌트에서 특정 액션을 수행.
+        - `screen.getByText(/learn react/i)`는 `screen` 객체의 `getByText` 메서드를 사용하여, 렌더링된 컴포넌트에서 "learn react"라는 텍스트를 포함하는 DOM 요소를 찾습니다.
+    3. 기대하는 결과와 실제 결과를 비교.
+        - `expect(linkElement).toBeInTheDocument()`는 `expect` 함수를 사용하여 `linkElement`가 문서 내에 존재하는지 확인합니다. 이는 `@testing-library/jest-dom`에서 제공하는 `toBeInTheDocument`라는 매처(matcher)를 사용하는 것으로, 해당 요소가 DOM에 존재하면 테스트가 성공적으로 통과됩니다.
+        - 만약 `linkElement`가 존재하지 않는다면, `toBeInTheDocument()` 함수는 테스트 실패 결과를 반환하며, 테스트 리포트에 이를 알려줍니다.
+2. 테스트 실행 및 검증.
+
+## 9장 모던 리액트 개발 도구로 개발환경 및 배포 환경 구축하기
+
+책에선 아무것도 없는 빈 폴더에서 Next.js 로 프로젝트 만들어보던데 이미 만들어 놓은 VITE+REACT에 이를 적용하고 싶어서 책 내용이랑은 다르게 정리해왔다. 
+
+### Next.js란?
+
+React 라이브러리만으로 개발을 해온 우리는
+
+라우팅을 위해 `react-router`와 같은 추가 라이브러리와 **클라이언트 사이드 렌더링 (CSR)**을 사용하여 개발해왔다. 
+
+CSR은 쉽게 말해서 클라이언트에서 모두 처리하는 것인데 뒤에서 더 자세히 설명
+
+1. 초기 빈 HTML 로드 : 보통  빈 <div>태그 
+2. JS 로딩 : HTML 과 함께 JS파일이 로드
+3. JS가 실행 되며 리액트 코드가 브라우저에서 상태를 구성하고 UI를 렌더링
+
+이와 다르게 **`Next.js`**는 React의 기능을 확장한 프레임워크입니다. ( 라이브러리의 기능을 확장한 프레임워크)
+
+라우팅, 데이터 페칭, SEO 최적화, 정적 사이트 생성(SSG) 및 서버 사이드 렌더링(SSR) 같은 기능들을 쉽게 사용할 수 있게 해준다. 
+
+**서버 사이드 렌더링 (SSR)** : 사용자의 요청이 서버에 도착하면, 서버는 즉시 필요한 데이터를 가져와 HTML을 생성해서 클라이언트에게 전해줌
+
+초기 로딩 시간을 줄이고, 사용자가 보게 될 완성된 페이지 콘텐츠를 브라우저에 빠르게 제공
+
+이는 검색 엔진 최적화 SEO에도 유리
+
+### Vite 프로젝트 세팅을 위해 프로젝트 구성에 필요한 내용
+
+책에선 CRA, CNA 명령어 없이 직접 package.json, 타입스크립트 사용을 위한 tsconfig.json를 작성하고 있어서 타입스크립트까지 사용하는 Vite 프로젝트 세팅을 위해 프로젝트 구성에 필요한 내용들을 정리했다.
+
+1. **Node.js 설치**
+
+Node.js 없이는 npm 또는 yarn 같은 패키지 관리자를 포함하여 다양한 빌드 도구와 프레임워크를 사용할 수 없다. 
+
+1. **패키지 설치**
+    
+    a. npm (node package manager) : Node.js 설치 시 자동으로 함께 설치되는 패키지 관리자로 **`package-lock.json`** 파일을 생성
+    
+    b. yarn : facebook에 의해 개발된 또 다른 자바스크립트 패키지 관리자로 npm의 성능 및 보안 문제를 개선하기 위해 만들어졌고 **`yarn.lock`** 파일을 생성
+    
+2. **vite 설치 `yarn create vite .`**
+
+**`index.html src/App.jsx vite.config.js package.json , src/main.jsx`** 파일이 생성된다. 
+
+1. **타입스크립트 설치**
+
+개발 의존성으로 타입스크립트 설치하고, 추가 패키지를 설치해야한다. 
+
+`tsconfig.json` 파일 생성
+
+```jsx
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true
+  },
+  "include": ["src"]
+}
+
+```
+
+```jsx
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+에  ts() 추가
+export default defineConfig({
+  plugins: [react(),ts() ],
+})
+```
+
+**클라이언트 사이드 렌더링이란?**
+
+렌더링: 서버로부터 요청해서 받은 내용을 브라우저 화면에 표시해주는 것
+
+1. 사용자가 웹 브라우저에서 URL을 입력하거나 링크를 클릭하면, 웹 서버에 웹 페이지를 요청
+
+ 서버는 요청받은 URL에 해당하는 기본 HTML 파일을 반환 ⇒ **`index.html`** 
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>스튜</title>
+    <link rel="icon" href="./src/assets/images/favicon.png" type="image/x-icon">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+```
+
+이 HTML 파일은 애플리케이션을 실행하는 데 필요한 최소한의 HTML 마크업과 `<script>` 태그를 포함
+
+2. HTML 파일을 받은 브라우저는 `<script>` 태그에 명시된 자바스크립트 파일을 ⇒ **`main.jsx`** 다운로드
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+import {BrowserRouter} from 'react-router-dom'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+    <App />
+    </BrowserRouter>
+  </React.StrictMode>,
+)
+```
+
+**import ReactDOM from 'react-dom/client'**
+
+`react-dom` 패키지의 새로운 클라이언트 사이드 렌더링 엔진에서 `ReactDOM` 객체를 가져온다.
+
+**ReactDOM.createRoot(document.getElementById('root'))**
+
+`document.getElementById('root')`로 지정된 DOM 요소를 찾아 (HTML 파일 내에 존재하는 빈 `<div>` 태그) React 컴포넌트들이 렌더링될 장소로 설정
+
+(App.jsx 컴포넌트)
+
+React의 '가상 DOM'이 실제 브라우저의 DOM과 연동되도록 함.
+
+1. 사용자가 웹 애플리케이션에서 특정 동작(링크 클릭, 버튼 클릭, 폼 제출 등)을 수행하면 axios 요청으로 요청을 통해 서버에 request를 보냄
+2. 필요한 데이터를 JSON 형식으로 클라이언트(브라우저)에 응답 ,  React는 useState, Redux 등을 통해 컴포넌트를 다시 렌더링해야 할지 결정
+3. 메모리 내에 존재하는 DOM의 가벼운 복사본으로 먼저 가상 DOM에 그 변경사항을 빠르게 적용
+4. 변경이 필요한 부분만 실제 DOM에 반영
+
+이 모든 과정이 클라이언트 사이드 렌더링이라 가상 DOM을 사용해 효율적으로 상태관리를 하지만, 초기 로딩 시간이 길어지며 SEO 에 약점을 보임
+
+⇒ 해결 방안 :  서버 사이드 렌더링 **`Next.js`**  
+
+**vite 설치시 추가되는 파일을 마저 알아보자.**
+**`package.json`**
+
+```jsx
+{
+  "name": "stew-frontend", 
+  "private": true,
+  "homepage": ".",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite", // 개발 서버
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.0.13",
+    "@mui/icons-material": "^5.16.4",
+    "@mui/lab": "^5.0.0-alpha.172",
+    "@mui/material": "^5.16.4",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "axios": "^0.21.1", // api 요청 보내기 위해 설치한 axios
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1", // DOM 바인딩을 제공 
+    "react-router-dom": "^6.25.1", //라우팅 라이브러리
+    "react-select": "^5.8.0", // 추가적으로 설치한 라이브러리 
+    "react-slider": "^2.0.6",
+    "styled-components": "^6.1.12", // css in js
+    "swiper": "^11.1.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.3.1"
+  },
+}
+
+```
+
+**`vite.config.js`**
+
+```jsx
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// Vite 구성
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      // API 요청을 프록시하는 설정
+      '/api': {
+        target: 'https://api.likelion-stew.shop',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
+});
+
+```
+
+### proxy
+
+클라이언트 애플리케이션(예: `localhost:5173`에서 실행 중)과 다른 도메인(예: `api.likelion-stew.shop`)의 서버 간에 직접 API 요청을 보낼 때, 브라우저의 보안 정책으로 인해 CORS 에러가 발생하는데 proxy 설정하면 이를 해결할 수 있다. 
+
+### 배포와 도커라이즈
+
+책에선 cra를 이용한 배포 방법에 대해 소개하고 있는데 저흰 vite를 이용했으니 공식 문서
+
+[정적 웹 페이지로 배포하기](https://ko.vitejs.dev/guide/static-deploy.html)
